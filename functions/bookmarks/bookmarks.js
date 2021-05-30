@@ -1,33 +1,48 @@
-const { ApolloServer, gql } = require('apollo-server-lambda')
+const { ApolloServer, gql } = require("apollo-server-lambda")
 
 const typeDefs = gql`
   type Query {
-    hello: String
-    allAuthors: [Author!]
-    author(id: Int!): Author
-    authorByName(name: String!): Author
+    Bookmark: [Bookmark!]
   }
-  type Author {
+
+  type Bookmark {
     id: ID!
-    name: String!
-    married: Boolean!
+    url: String!
+    desc: String!
+  }
+
+  type Mutation {
+    addBookMarkz(url: String!, desc: String!)
   }
 `
 
 const authors = [
-  { id: 1, name: 'Terry Pratchett', married: false },
-  { id: 2, name: 'Stephen King', married: true },
-  { id: 3, name: 'JK Rowling', married: false },
+  {
+    id: 1,
+    URL: "https://github.com/gatsbyjs/gatsby-starter-hello-world",
+    desc: "this is a github gatsby official repository",
+  },
+  {
+    id: 2,
+    URL: "https://github.com/gatsbyjs/gatsby-starter-hello-world",
+    desc: "this is a github gatsby official repository",
+  },
+  {
+    id: 3,
+    URL: "https://github.com/gatsbyjs/gatsby-starter-hello-world",
+    desc: "this is a github gatsby official repository",
+  },
 ]
 
 const resolvers = {
   Query: {
-    hello: () => 'Hello, world!',
-    allAuthors: () => authors,
-    author: () => {},
-    authorByName: (root, args) => {
-      console.log('hihhihi', args.name)
-      return authors.find((author) => author.name === args.name) || 'NOTFOUND'
+    Bookmark: (root, args, context) => {
+      return authors
+    },
+  },
+  Mutation: {
+    addBookMark: (_, { url, desc }) => {
+      console.log("url--desc", url, "desc", desc)
     },
   },
 }
